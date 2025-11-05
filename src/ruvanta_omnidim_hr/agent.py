@@ -1,5 +1,12 @@
 """
 Main HR Agent implementation
+
+SECURITY NOTE: This implementation includes INFO-level logging for audit purposes.
+In production environments, ensure logging is configured appropriately and consider:
+- Using structured logging with field-level sensitivity controls
+- Implementing log rotation and secure storage
+- Following your organization's data retention policies
+- Applying appropriate access controls to log files
 """
 
 from typing import List, Optional, Dict

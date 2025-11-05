@@ -175,6 +175,16 @@ This project follows PEP 8 style guidelines.
 
 Current version: **1.0.0** (Ruvanta Omnidim Version)
 
+## Security Considerations
+
+This implementation includes logging for audit trail purposes. When deploying in production:
+
+- **Logging**: Configure logging levels appropriately. The system logs employee operations at INFO level for compliance and audit purposes.
+- **Data Access**: Implement proper authentication and authorization before exposing the HR Agent API.
+- **Data Storage**: The in-memory storage is suitable for demonstrations. Use a secure database in production.
+- **Sensitive Data**: Consider your organization's data handling policies when logging employee information.
+- **Network Security**: If exposing via API, use HTTPS and implement proper API security (authentication, rate limiting, etc.).
+
 ## License
 
 Copyright © 2025 Ruvanta Team. All rights reserved.
