@@ -10,6 +10,7 @@ dotenv.config();
 const app = express();
 const PORT = process.env.PORT || 3000;
 
+// ✅ CORS setup
 const allowedOrigins = [
   "http://localhost:5173",
   "https://ruvanta-hr-agent.vercel.app",
@@ -21,7 +22,6 @@ app.use((req, res, next) => {
   next();
 });
 
-// ✅ CORS middleware (handles preflight automatically)
 app.use(
   cors({
     origin: function (origin, callback) {
@@ -35,8 +35,9 @@ app.use(
   })
 );
 
-// ✅ Important: explicitly handle OPTIONS requests
-app.options("*", cors());
+// ✅ Handles preflight automatically for all routes
+app.options(/.*/, cors());
+
 
 // ✅ Common middleware
 app.use(cookieParser());
