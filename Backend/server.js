@@ -1,23 +1,25 @@
 import express from "express";
+import cors from "cors";
 import dotenv from "dotenv";
-import userRoute from './routes/userRoutes.js';
-import omnidimProxy from './routes/omnidimProxy.js';
 import mongoose from "mongoose";
 import cookieParser from "cookie-parser";
-import cors from "cors";           // ✅ Add this line
+
+import userRoutes from "./routes/userRoutes.js";
+import omnidimProxy from "./routes/omnidimProxy.js"; // if you have this file
 
 dotenv.config();
-import Cors from "cors";
-
 
 const app = express();
+const PORT = process.env.PORT || 3000;
 
+// ✅ Allowed Origins
 const allowedOrigins = [
   "http://localhost:5173",
   "https://ruvanta-hr-agent.vercel.app",
-  "https://ruvanta-omnidim-hr-agent-pawr.vercel.app" // your new frontend URL
+  "https://ruvanta-omnidim-hr-agent-pawr.vercel.app"
 ];
 
+// ✅ Correct CORS setup
 app.use(
   cors({
     origin: function (origin, callback) {
@@ -31,42 +33,31 @@ app.use(
   })
 );
 
-
-
+// ✅ Middleware
 app.use(cookieParser());
-app.use(express.json())
-app.use(express.urlencoded({extended: true}))
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
-const PORT  = process.env.PORT 
-const MONGODB_URI = process.env.MONGODB_URI
+// ✅ API Routes
+app.use("/api/users", userRoutes);
+app.use("/api/omnidim", omnidimProxy);
 
-app.use('/api/users', userRoute)
-app.use('/api/omnidim', omnidimProxy)
+// ✅ Health route for testing
+app.get("/", (req, res) => {
+  res.send("✅ Backend is running and CORS is configured properly!");
+});
 
-// try {
-//     mongoose.connect(URI).then(() => {
-//         console.log('Connected to MongoDB')
-//     })
-// } catch (error) {
+// ✅ MongoDB Connection
+const MONGODB_URI = process.env.MONGO_URI || process.env.MONGODB_URI;
 
-//     console.log(`Mongodb not connected: ${error.message}`);
-    
-// }
-try {
-    mongoose.connect(MONGODB_URI)
-.then(
-    console.log("mongodb connection")
-)
-} catch (error) {
-    console.log(`Mongodb not connected: ${error.message}`);
-    
-}
-
-
-app.get('/', (req, res) => {
-    res.send('Hello World!')
-})
-
-app.listen(PORT, () => {
-    console.log(`Server is listening on port  ${PORT}`)
-})
+mongoose
+  .connect(MONGODB_URI)
+  .then(() => {
+    console.log("✅ MongoDB connected successfully");
+    app.listen(PORT, () => {
+      console.log(`🚀 Server running on port ${PORT}`);
+    });
+  })
+  .catch((err) => {
+    console.error("❌ MongoDB connection failed:", err.message);
+  });
