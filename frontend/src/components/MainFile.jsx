@@ -69,7 +69,7 @@ export default function VapiVoiceCaller() {
   const API_TOKEN = 'wu2rq5auZwgIuyJdr9KKfITCMyr9XFXGsuq7oDBIZVo';
   const AGENT_ID = 51650; // Replace with your numeric agent ID from OmniDim dashboard
   const FROM_NUMBER_ID = 400; // Replace with your from_number_id from phone number API
-  const BACKEND_URL = 'http://localhost:3000/api/omnidim'; // Backend proxy URL
+  const BACKEND_URL = 'https://ruvanta-hr-agent.onrender.com'; // Backend proxy URL
 
   // ============================================
   // EFFECTS
