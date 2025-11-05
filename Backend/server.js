@@ -2,24 +2,26 @@ import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
 import mongoose from "mongoose";
-import cookieParser from "cookie-parser";
-
 import userRoutes from "./routes/userRoutes.js";
-import omnidimProxy from "./routes/omnidimProxy.js"; // if you have this file
+import cookieParser from "cookie-parser";
 
 dotenv.config();
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-// ✅ Allowed Origins
 const allowedOrigins = [
   "http://localhost:5173",
   "https://ruvanta-hr-agent.vercel.app",
-  "https://ruvanta-omnidim-hr-agent-pawr.vercel.app"
+  "https://ruvanta-omnidim-hr-agent-pawr.vercel.app",
 ];
 
-// ✅ Correct CORS setup
+app.use((req, res, next) => {
+  console.log("🛰️ Request Origin:", req.headers.origin);
+  next();
+});
+
+// ✅ CORS middleware (handles preflight automatically)
 app.use(
   cors({
     origin: function (origin, callback) {
@@ -33,31 +35,22 @@ app.use(
   })
 );
 
-// ✅ Middleware
+// ✅ Important: explicitly handle OPTIONS requests
+app.options("*", cors());
+
+// ✅ Common middleware
 app.use(cookieParser());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// ✅ API Routes
+// ✅ Routes
 app.use("/api/users", userRoutes);
-app.use("/api/omnidim", omnidimProxy);
 
-// ✅ Health route for testing
-app.get("/", (req, res) => {
-  res.send("✅ Backend is running and CORS is configured properly!");
-});
-
-// ✅ MongoDB Connection
-const MONGODB_URI = process.env.MONGO_URI || process.env.MONGODB_URI;
-
+// ✅ Database connection
 mongoose
-  .connect(MONGODB_URI)
+  .connect(process.env.MONGO_URI)
   .then(() => {
     console.log("✅ MongoDB connected successfully");
-    app.listen(PORT, () => {
-      console.log(`🚀 Server running on port ${PORT}`);
-    });
+    app.listen(PORT, () => console.log(`🚀 Server running on port ${PORT}`));
   })
-  .catch((err) => {
-    console.error("❌ MongoDB connection failed:", err.message);
-  });
+  .catch((err) => console.log(err));
