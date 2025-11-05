@@ -4,6 +4,7 @@ import userRoute from './routes/userRoutes.js';
 import omnidimProxy from './routes/omnidimProxy.js';
 import mongoose from "mongoose";
 import cookieParser from "cookie-parser";
+import cors from "cors";           // ✅ Add this line
 
 dotenv.config();
 import Cors from "cors";
