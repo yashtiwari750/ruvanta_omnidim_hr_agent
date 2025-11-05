@@ -11,14 +11,24 @@ import Cors from "cors";
 
 const app = express();
 
-app.use(Cors(
-   {
-    origin:'http://localhost:5173',
-    credentials:true,
-      methods: ['GET', 'POST'],
-  allowedHeaders: ['Content-Type', 'Authorization']
-   }
-))
+const allowedOrigins = [
+  "http://localhost:5173",
+  "https://ruvanta-omnidim-hr-agent-pawr.vercel.app" // new frontend URL
+];
+
+app.use(cors({
+  origin: function (origin, callback) {
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error("Not allowed by CORS"));
+    }
+  },
+  credentials: true
+}));
+
+
+
 app.use(cookieParser());
 app.use(express.json())
 app.use(express.urlencoded({extended: true}))
