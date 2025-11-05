@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const API = axios.create({
-  baseURL: 'http://localhost:3000', // Your backend base URL
+  baseURL: 'https://ruvanta-hr-agent.onrender.com', 
   withCredentials: true, // Send cookies
 });
 
