@@ -14,19 +14,22 @@ const app = express();
 
 const allowedOrigins = [
   "http://localhost:5173",
-  "https://ruvanta-omnidim-hr-agent-pawr.vercel.app" // new frontend URL
+  "https://ruvanta-hr-agent.vercel.app",
+  "https://ruvanta-omnidim-hr-agent-pawr.vercel.app" // your new frontend URL
 ];
 
-app.use(cors({
-  origin: function (origin, callback) {
-    if (!origin || allowedOrigins.includes(origin)) {
-      callback(null, true);
-    } else {
-      callback(new Error("Not allowed by CORS"));
-    }
-  },
-  credentials: true
-}));
+app.use(
+  cors({
+    origin: function (origin, callback) {
+      if (!origin || allowedOrigins.includes(origin)) {
+        callback(null, true);
+      } else {
+        callback(new Error("Not allowed by CORS"));
+      }
+    },
+    credentials: true,
+  })
+);
 
 
 
